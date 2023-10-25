@@ -7,39 +7,63 @@ import { useState } from 'react';
 const App = () => {
     const [currentValue, setCurrentValue] = useState('0');
     const [prevValue, setPrevValue] = useState('0');
-    const [result, setResult] = useState('0');
-    const [operation, setOperation]=useState('');
+    const [operation, setOperation]=useState(null);
 
 
     const handleOnClear = () => {
         setCurrentValue('0')
         setPrevValue('0')
-        setResult('0')
         setOperation('')
     };
 
     const handleAddDigit = (digit) => { 
         if(digit === '.' && currentValue.includes(".")) {
             return;
-        }            
-        setCurrentValue(prev => prev === '0' ? digit : prev += digit)      
-        
-    }
+        } else {
+          setCurrentValue(prev => prev === '0' ? digit : prev += digit)
+        }        
+    }    
+
+    const handleOperation = () => {
+      if(prevValue !=='0' && operation !== 'null' && currentValue !== '0'){
+         switch ((operation)) {
+          case '+':
+              handleSum(); 
+              break;
+          
+          case '-':
+              handleMinus();
+              break;
+          
+          case '/':
+              handleDivide();
+              break;
+
+          case '*':
+              handleMultiply();
+              break;
+
+          case '%':
+              handlePercent();
+              break;
+
+          default:
+              break;
+         }
+      }
+  }
     
-    const handleSum = () => {       
-
+    const handleSum = (e) => { 
         if(prevValue==='0'){    
-            setPrevValue(String(currentValue));        
-            setCurrentValue('0')
+            setPrevValue(String(currentValue));         
+            setCurrentValue('') 
             setOperation('+')
-
+          
         }else {            
             const sum = Number(prevValue) + Number(currentValue)            
             setCurrentValue(String(sum))
             console.log('prevValue = ' + prevValue)
-            console.log('currentNumber = ' + currentValue)   
-            console.log('result = ' + result)        
-            
+            console.log('currentNumber = ' + currentValue)             
             setOperation('')
         }
     }
@@ -80,30 +104,11 @@ const App = () => {
       }
     }
 
-    const handleEquals = () => {
-        if(prevValue !=='0' && operation !== '' && currentValue !== '0'){
-           switch ((operation)) {
-            case '+':
-                handleSum();
-                break;
-            
-            case '-':
-                handleMinus();
-                break;
-            
-            case '/':
-                handleDivide();
-                break;
-
-            case '*':
-                handleMultiply();
-                break;
-
-            default:
-                break;
-           }
-        }
+    const handlePercent= () => {
+        const percent = Number(currentValue/100)
+        setCurrentValue(String(percent))   
     }
+    
 
     return (
         <Container>
@@ -112,7 +117,7 @@ const App = () => {
                 <Row>
                     <Button label= 'C' onClick = {handleOnClear}/>
                     <Button label= '<--' onClick = {() => handleAddDigit('')}/>
-                    <Button label= '%' onClick = {() => handleAddDigit('')}/>
+                    <Button label= '%' onClick = {handlePercent}/>
                     <Button label= '/' onClick = {handleDivide}/>
                 </Row>
                 <Row>
@@ -131,13 +136,13 @@ const App = () => {
                     <Button label= '1' onClick = {() => handleAddDigit('1')}/>
                     <Button label= '2' onClick = {() => handleAddDigit('2')}/>
                     <Button label= '3' onClick = {() => handleAddDigit('3')}/>
-                    <Button label= '+' onClick = {handleSum}/>
+                    <Button label= '+' onClick = {handleSum} value={'+'}/>
                 </Row>
                 <Row>
                     <Button label= '00' onClick = {() => handleAddDigit('00')}/>
                     <Button label= '0' onClick = {() => handleAddDigit('0')}/>
                     <Button label= '.' onClick = {() => handleAddDigit('.')}/>
-                    <Button label= '=' onClick = {handleEquals}/>
+                    <Button label= '=' onClick = {handleOperation}/>
                 </Row>
            </Content>
         </Container>
