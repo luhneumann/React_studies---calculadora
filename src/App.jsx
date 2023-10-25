@@ -24,34 +24,7 @@ const App = () => {
         }        
     }    
 
-    const handleOperation = () => {
-      if(prevValue !=='0' && operation !== 'null' && currentValue !== '0'){
-         switch ((operation)) {
-          case '+':
-              handleSum(); 
-              break;
-          
-          case '-':
-              handleMinus();
-              break;
-          
-          case '/':
-              handleDivide();
-              break;
-
-          case '*':
-              handleMultiply();
-              break;
-
-          case '%':
-              handlePercent();
-              break;
-
-          default:
-              break;
-         }
-      }
-  }
+    
     
     const handleSum = (e) => { 
         if(prevValue==='0'){    
@@ -71,7 +44,7 @@ const App = () => {
     const handleMinus = () => {
         if(prevValue==='0'){
             setPrevValue(String(currentValue));
-            setCurrentValue('0')
+            setCurrentValue('')
             setOperation('-')
         }else {
             const minus = Number(prevValue) - Number(currentValue)
@@ -83,7 +56,7 @@ const App = () => {
     const handleDivide = () => {
       if(prevValue==='0'){
           setPrevValue(String(currentValue));
-          setCurrentValue('0')
+          setCurrentValue('')
           setOperation('/')
       }else {
           const divide = Number(prevValue) / Number(currentValue)
@@ -95,7 +68,7 @@ const App = () => {
     const handleMultiply = () => {
       if(prevValue==='0'){
           setPrevValue(String(currentValue));
-          setCurrentValue('0')
+          setCurrentValue('')
           setOperation('*')
       }else {
           const multiply = Number(prevValue) * Number(currentValue)
@@ -108,6 +81,36 @@ const App = () => {
         const percent = Number(currentValue/100)
         setCurrentValue(String(percent))   
     }
+
+    const deleteLastDigit = () => {
+        const deleteLast = Number(currentValue.slice(0, -1))
+        setCurrentValue(String(deleteLast))
+    }
+
+    const handleEquals = () => {
+      if(prevValue !=='0' && operation !== 'null' && currentValue !== '0'){
+         switch ((operation)) {
+          case '+':
+              handleSum(); 
+              break;
+          
+          case '-':
+              handleMinus();
+              break;
+          
+          case '/':
+              handleDivide();
+              break;
+
+          case '*':
+              handleMultiply();
+              break;
+          
+          default:
+              break;
+         }
+      }
+  }
     
 
     return (
@@ -116,7 +119,7 @@ const App = () => {
                 <Input value = {currentValue}/>
                 <Row>
                     <Button label= 'C' onClick = {handleOnClear}/>
-                    <Button label= '<--' onClick = {() => handleAddDigit('')}/>
+                    <Button label= 'DEL' onClick = {deleteLastDigit}/>
                     <Button label= '%' onClick = {handlePercent}/>
                     <Button label= '/' onClick = {handleDivide}/>
                 </Row>
@@ -142,7 +145,7 @@ const App = () => {
                     <Button label= '00' onClick = {() => handleAddDigit('00')}/>
                     <Button label= '0' onClick = {() => handleAddDigit('0')}/>
                     <Button label= '.' onClick = {() => handleAddDigit('.')}/>
-                    <Button label= '=' onClick = {handleOperation}/>
+                    <Button label= '=' onClick = {handleEquals}/>
                 </Row>
            </Content>
         </Container>
